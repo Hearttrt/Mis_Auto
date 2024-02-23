@@ -12,12 +12,12 @@ filePath = "../data/cookies.txt"
 
 
 class MisAuto:
-    def __init__(self, username, password, appointUser, appointPeople, saleNameList):
+    def __init__(self, username, password, appointUser, appointPeople):
         self.username = username
         self.password = password
         self.appointUser = appointUser
         self.appointPeople = appointPeople
-        self.saleNameList = saleNameList
+        # self.saleNameList = saleNameList
         self.login()
         self.saleName = None
         self.landID = None
@@ -107,18 +107,16 @@ class MisAuto:
     def get_business_list_update(self):
         pass
  
-    def get_latest_projects(self, showCount=20):
+    def get_latest_projects(self, salepeople_list, show_num=20):
         """
             GET(params): 
-            获取项目落地的列表最近的20条, status == 0
+            获取列表最近的20条, status == 0
         """
-        # if self.session is None:
-        #     self.login()
         url = URL_BASE + '/operation/dispatch'
         params = {
             "status" : 0,
             "currentPage": 1,
-            "showCount": {showCount}
+            "showCount": show_num
         } # TODO: check pls
         response = self.get_something(url, params)
         # get status=0 list
@@ -126,7 +124,7 @@ class MisAuto:
         # extract to tuple_list(landId, projectNumber, status, saleName)
         extracted_list = [
             (d["landId"], d["projectNumber"], d["status"], d["saleName"]) 
-            for d in project_list if d["saleName"] in self.saleNameList
+            for d in project_list if d["saleName"] in salepeople_list
             ]
         
         return extracted_list
@@ -134,10 +132,10 @@ class MisAuto:
     def get_project_info_detail(self, landID):
         """
             GET(params): 
-            landid --> 获取落地明细信息:
+            landid --> 获取明细信息:
              - msg --> str:success
              - obj --> {}
-                - land --> {...} 落地明细信息都在这
+                - land --> {...} 明细信息都在这
                 - projectTypeList --> [...] 没啥用
                 - page --> {...} 这里面有个token不知道干啥的
                 - write --> bool: true
@@ -149,7 +147,7 @@ class MisAuto:
         params = {
             "landId": landID,
             "type": 1
-        } # TODO: check pls
+        }
         response = self.get_something(url, params).json()
 
         return response
@@ -215,7 +213,7 @@ class MisAuto:
     def post_project_pm(self, landID):
         """
             POST(json/data): 
-            landid --> 指派：
+            landid --> post：
              - error --> num: 0
              - msg --> str: success 
              - obj --> null
@@ -234,7 +232,7 @@ class MisAuto:
   
     def post_ship(self, data):
         """
-            POST(json/data): 出库单
+            POST(json/data): 
         """
         url = URL_BASE + '/operation/ship'
         # data = self.concat_json() 

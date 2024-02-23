@@ -6,12 +6,12 @@ username = ""
 password = ""
 appointUser = ""
 appointPeople = ""
-saleNameList = []
+salepeople_list = []
 
 landid = ""
 
-c = MisAuto(username,password,appointUser,appointPeople,saleNameList)
-c.get_project_ship_detial(landid)
+c = MisAuto(username,password,appointUser,appointPeople)
+c.get_latest_projects(appointPeople)
 
 
 
