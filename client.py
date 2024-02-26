@@ -97,7 +97,6 @@ class MisAuto:
             data = self.get_business_list(params).get("obj",{}).get("list", [])
             totalList = totalList + data # 列表相加
             time.sleep(1)
-            # print(f'正在获取第{i}页')
         currentTime = time.strftime("%Y%m%d_%H%M%S")
         filename = f"{defaultPath}/misauto_all_{currentTime}_{totalResult}.json"
         with open(filename, 'w') as outfile:
